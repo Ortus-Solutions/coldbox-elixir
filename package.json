@@ -1,0 +1,34 @@
+{
+  "name": "coldbox-elixir",
+  "version": "3.0.0-alpha.11",
+  "description": "A wrapper around Webpack specifically for ColdBox applications",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Eric Peterson",
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "clean-webpack-plugin": "^0.1.17",
+    "cross-env": "^5.1.3",
+    "css-loader": "^0.28.8",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.6",
+    "npm-install-webpack-plugin": "^4.0.5",
+    "progress-bar-webpack-plugin": "^1.10.0",
+    "resolve-url-loader": "^2.2.1",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.10.0",
+    "webpack-clean-obsolete-chunks": "^0.3.0",
+    "webpack-extraneous-file-cleanup-plugin": "^1.0.5",
+    "webpack-manifest-plugin": "^1.3.2",
+    "webpack-merge": "^4.1.1"
+  },
+  "devDependencies": {
+    "jest": "^22.0.6"
+  }
+}
