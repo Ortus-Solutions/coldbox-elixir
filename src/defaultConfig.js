@@ -116,10 +116,19 @@ module.exports = () => ({
                 : "[name].js"
         }),
         // add these based on what features are enabled
-        new CleanWebpackPlugin(["includes/js", "includes/css"], {
-            root: global.elixir.rootPath,
-            verbose: false
-        }),
+        new CleanWebpackPlugin(
+            [
+                "includes/js",
+                "includes/css",
+                "includes/fonts",
+                "includes/media",
+                "includes/images"
+            ],
+            {
+                root: global.elixir.rootPath,
+                verbose: false
+            }
+        ),
         new CleanObsoleteChunks({
             verbose: false
         }),

@@ -41,7 +41,10 @@ class ElixirConfig {
         this.mergeConfig({
             resolve: {
                 alias: {
-                    [`@${name}`]: path.resolve(__dirname, `./${this.prefix}`)
+                    [`@${name}`]: path.resolve(
+                        global.elixir.rootPath,
+                        `./${this.prefix}/resources/assets/js`
+                    )
                 }
             },
             plugins: [
