@@ -105,14 +105,16 @@ class ElixirConfig {
     }
 
     dependencies(deps) {
+        let missing = false;
         deps.forEach(dep => {
             try {
                 require.resolve(dep);
             } catch (e) {
+                missing = true;
                 this.missingDependencies.add(dep);
             }
         });
-        return this;
+        return missing;
     }
 
     installMissingDependencies() {

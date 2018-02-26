@@ -1,5 +1,7 @@
 module.exports = function(options = {}) {
-    this.dependencies(["browser-sync", "browser-sync-webpack-plugin"]);
+    if (this.dependencies(["browser-sync", "browser-sync-webpack-plugin"])) {
+        return;
+    }
     Object.assign(options, {
         host: "localhost",
         port: 3000,
