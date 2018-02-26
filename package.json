@@ -29,6 +29,7 @@
     "webpack-merge": "^4.1.1"
   },
   "devDependencies": {
+    "dotenv": "^5.0.0",
     "jest": "^22.0.6"
   }
 }

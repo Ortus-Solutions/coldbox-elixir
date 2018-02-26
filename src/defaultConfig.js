@@ -11,6 +11,11 @@ const webpack = require("webpack");
 const path = require("path");
 const fs = require("fs");
 
+const dotEnvFile = path.resolve(process.cwd(), ".env");
+if (fs.existsSync(dotEnvFile)) {
+    require("dotenv").config({ path: dotEnvFile });
+}
+
 module.exports = () => ({
     output: {
         path: global.elixir.rootPath,
@@ -143,6 +148,13 @@ module.exports = () => ({
             minBytes: 1024,
             manifestJsonName: "includes/manifest.json",
             paths: ["includes/css"]
+        }),
+        new webpack.DefinePlugin({
+            // stringify each value so webpack doesn't insert variables instead of strings
+            "process.env": Object.keys(process.env).reduce((obj, key) => {
+                obj[key] = JSON.stringify(process.env[key]);
+                return obj;
+            }, {})
         })
     ],
     stats: {
