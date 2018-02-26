@@ -134,6 +134,11 @@ class ElixirConfig {
             }
 
             exec(command);
+
+            console.log(
+                "Dependencies installed.  Please run ColdBox Elixir again."
+            );
+            process.exit(1);
         }
         return this;
     }
