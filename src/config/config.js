@@ -1,4 +1,3 @@
-const ExtraneousFileCleanupPlugin = require("webpack-extraneous-file-cleanup-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const webpackMerge = require("webpack-merge");
 const exec = require("child_process").execSync;
@@ -48,12 +47,6 @@ class ElixirConfig {
                 }
             },
             plugins: [
-                new ExtraneousFileCleanupPlugin({
-                    extensions: [".js"],
-                    minBytes: 1024,
-                    manifestJsonName: `${this.prefix}includes/manifest.json`,
-                    paths: [`${this.prefix}includes/css`]
-                }),
                 new CleanWebpackPlugin(
                     [`${this.prefix}includes/js`, `${this.prefix}includes/css`],
                     { root: global.elixir.rootPath, verbose: false }
