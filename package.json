@@ -1,6 +1,6 @@
 {
   "name": "coldbox-elixir",
-  "version": "3.0.0-alpha.20",
+  "version": "3.0.0-alpha.22",
   "description": "A wrapper around Webpack specifically for ColdBox applications",
   "main": "src/index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "progress-bar-webpack-plugin": "^1.10.0",
     "resolve-url-loader": "^2.2.1",
     "url-loader": "^0.6.2",
-    "webpack": "^4.0.0",
+    "webpack": "^4.5.0",
     "webpack-clean-obsolete-chunks": "^0.3.0",
     "webpack-cli": "^2.0.9",
     "webpack-extraneous-file-cleanup-plugin": "^1.0.5",
