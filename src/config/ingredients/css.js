@@ -1,4 +1,5 @@
 const path = require("path");
+const WebpackDeleteAfterEmit = require('webpack-delete-after-emit');
 
 module.exports = function(
     filename,
@@ -9,7 +10,8 @@ module.exports = function(
     } = {}
 ) {
     this.dependencies(["css-loader", "postcss-loader"]);
-    const chunkName = path.join(this.prefix, outputDirectory, name);
+    const expandedOutputDirectory = path.join(this.prefix, outputDirectory);
+    const chunkName = path.join(expandedOutputDirectory, name);
     const srcName = Array.isArray(filename)
         ? filename.map(
               file => "./" + path.join(this.prefix, entryDirectory, file)
@@ -18,6 +20,14 @@ module.exports = function(
     return this.mergeConfig({
         entry: {
             [chunkName]: srcName
-        }
+        },
+        plugins: [
+            new WebpackDeleteAfterEmit({
+                globs: [
+                    `${expandedOutputDirectory}/*.js`,
+                    `${expandedOutputDirectory}/*.js.map`
+                ]
+            })
+        ]
     });
 };

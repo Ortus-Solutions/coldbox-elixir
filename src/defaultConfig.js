@@ -1,10 +1,11 @@
-const ExtraneousFileCleanupPlugin = require( "webpack-extraneous-file-cleanup-plugin" );
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const CleanObsoleteChunks = require( "webpack-clean-obsolete-chunks" );
-const MiniCssExtractPlugin = require( "mini-css-extract-plugin" );
 const ProgressBarPlugin = require( "progress-bar-webpack-plugin" );
 const NpmInstallPlugin = require( "npm-install-webpack-plugin" );
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require( "clean-webpack-plugin" );
 const ManifestPlugin = require( "webpack-manifest-plugin" );
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const styleLoaders = require( "./utils/styleLoaders" );
 const webpackMerge = require( "webpack-merge" );
 const webpack = require( "webpack" );
@@ -123,12 +124,6 @@ module.exports = () => ( {
         new MiniCssExtractPlugin({
 			filename: global.elixir.versioning ? "[name].[contenthash].css" : "[name].css"
         }),
-        new ExtraneousFileCleanupPlugin( {
-			extensions: [ ".js" ],
-			minBytes: 1024,
-			manifestJsonName: "includes/manifest.json",
-			paths: [ "includes/css" ]
-		} ),
         new webpack.DefinePlugin( {
 			// stringify each value so webpack doesn't insert variables instead of strings
 			"process.env": Object.keys( process.env )
@@ -141,6 +136,26 @@ module.exports = () => ( {
 	stats: {
 		children: false
 	},
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                styles: {
+                    name: 'styles',
+                    test: /\.css$/,
+                    chunks: 'all',
+                    enforce: true
+                }
+            }
+        },
+        minimizer: [
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                sourceMap: true // set to true if you want JS source maps
+            }),
+            new OptimizeCSSAssetsPlugin({})
+        ]
+    },
 	node: {
 		// prevent webpack from injecting useless setImmediate polyfill because Vue
 		// source contains it (although only uses it if it's native).
