@@ -1,6 +1,6 @@
 const ExtraneousFileCleanupPlugin = require( "webpack-extraneous-file-cleanup-plugin" );
 const CleanObsoleteChunks = require( "webpack-clean-obsolete-chunks" );
-const ExtractTextPlugin = require( "extract-text-webpack-plugin" );
+const MiniCssExtractPlugin = require( "mini-css-extract-plugin" );
 const ProgressBarPlugin = require( "progress-bar-webpack-plugin" );
 const NpmInstallPlugin = require( "npm-install-webpack-plugin" );
 const CleanWebpackPlugin = require( "clean-webpack-plugin" );
@@ -120,9 +120,9 @@ module.exports = () => ( {
         new ManifestPlugin( {
 			fileName: "includes/manifest.json"
 		} ),
-        new ExtractTextPlugin(
-			global.elixir.versioning ? "[name].[contenthash].css" : "[name].css"
-        ),
+        new MiniCssExtractPlugin({
+			filename: global.elixir.versioning ? "[name].[contenthash].css" : "[name].css"
+        }),
         new ExtraneousFileCleanupPlugin( {
 			extensions: [ ".js" ],
 			minBytes: 1024,
