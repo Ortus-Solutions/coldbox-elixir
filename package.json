@@ -1,6 +1,6 @@
 {
   "name": "coldbox-elixir",
-  "version": "3.0.0-alpha.24",
+  "version": "3.0.0-alpha.25",
   "description": "A wrapper around Webpack specifically for ColdBox applications",
   "main": "src/index.js",
   "scripts": {
