@@ -1,5 +1,5 @@
 const path = require("path");
-const WebpackDeleteAfterEmit = require('webpack-delete-after-emit');
+const WebpackDeleteAfterEmit = require("webpack-delete-after-emit");
 
 module.exports = function(
     filename,
@@ -9,7 +9,12 @@ module.exports = function(
         entryDirectory = "resources/assets/css/"
     } = {}
 ) {
-    this.dependencies(["css-loader", "postcss-loader"]);
+    this.dependencies([
+        "css-loader",
+        "postcss-loader",
+        "url-loader",
+        "file-loader"
+    ]);
     const expandedOutputDirectory = path.join(this.prefix, outputDirectory);
     const chunkName = path.join(expandedOutputDirectory, name);
     const srcName = Array.isArray(filename)
@@ -20,6 +25,20 @@ module.exports = function(
     return this.mergeConfig({
         entry: {
             [chunkName]: srcName
+        },
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    [name]: {
+                        name,
+                        test: (m, c, entry = name) =>
+                            m.constructor.name === "CssModule" &&
+                            this.recursiveIssuer(m) === entry,
+                        chunks: "all",
+                        enforce: true
+                    }
+                }
+            }
         },
         plugins: [
             new WebpackDeleteAfterEmit({

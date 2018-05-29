@@ -13,7 +13,7 @@ module.exports = function(
         "babel-plugin-syntax-jsx",
         "babel-plugin-transform-vue-jsx",
         "babel-helper-vue-jsx-merge-props",
-        "vue-loader",
+        "vue-loader@^14",
         "vue-template-compiler"
     ]);
     this.mergeBabelOptions({
@@ -28,6 +28,7 @@ module.exports = function(
                 {
                     test: /\.vue$/,
                     loader: "vue-loader",
+                    exclude: /node_modules/,
                     options: {
                         loaders: cssLoaders(
                             // Add an entry point for each style sheet
@@ -41,5 +42,9 @@ module.exports = function(
             ]
         }
     });
-    return this.js(filename, { name, outputDirectory, sourceDirectory });
+    return this.js(filename, {
+        name,
+        outputDirectory,
+        sourceDirectory
+    });
 };

@@ -93,6 +93,16 @@ class ElixirConfig {
         return this;
     }
 
+    recursiveIssuer(m) {
+        if (m.issuer) {
+            return this.recursiveIssuer(m.issuer);
+        } else if (m.name) {
+            return m.name;
+        } else {
+            return false;
+        }
+    }
+
     generateFrom(config) {
         return webpackMerge.smart(config, this.config);
     }
