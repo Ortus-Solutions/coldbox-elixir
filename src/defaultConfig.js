@@ -139,8 +139,18 @@ module.exports = () => ({
         children: false
     },
     optimization: {
+        runtimeChunk: {
+            name: "includes/js/runtime"
+        },
         splitChunks: {
-            cacheGroups: {}
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: "includes/js/vendor",
+                    enforce: true,
+                    chunks: "all"
+                }
+            }
         },
         minimizer: [
             new UglifyJsPlugin({
