@@ -23,7 +23,7 @@ class ElixirConfig {
         return this;
     }
 
-    module(location, { folderName = "modules_app" }) {
+    module(location, { folderName = "modules_app" } = {}) {
         const oldPrefix = this.prefix;
         this.prefix = path.join(this.prefix, folderName, location, "/");
         const moduleRecipe = require(path.resolve(
@@ -111,7 +111,7 @@ class ElixirConfig {
         let missing = false;
         deps.forEach(dep => {
             try {
-                require.resolve(dep);
+                require.resolve(dep.split("@")[0]);
             } catch (e) {
                 missing = true;
                 this.missingDependencies.add(dep);
