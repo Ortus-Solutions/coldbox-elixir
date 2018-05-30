@@ -145,7 +145,12 @@ module.exports = () => ({
         splitChunks: {
             cacheGroups: {
                 vendor: {
-                    test: /[\\/]node_modules[\\/]/,
+                    test: (m, c, entry) => {
+                        return (
+                            m.constructor.name !== "CssModule" &&
+                            /[\\/]node_modules[\\/]/.test(m.resource)
+                        );
+                    },
                     name: "includes/js/vendor",
                     enforce: true,
                     chunks: "all"
