@@ -23,13 +23,16 @@ class ElixirConfig {
         return this;
     }
 
-    module(location, { folderName = "modules_app" } = {}) {
+    module(
+        location,
+        { folderName = "modules_app", fileName = "elixir-module" } = {}
+    ) {
         const oldPrefix = this.prefix;
         this.prefix = path.join(this.prefix, folderName, location, "/");
         const moduleRecipe = require(path.resolve(
             global.elixir.rootPath,
             this.prefix,
-            "elixir-module"
+            fileName
         ));
         moduleRecipe(this);
         const name = this.prefix
@@ -57,13 +60,17 @@ class ElixirConfig {
         return this;
     }
 
-    modules(includes, excludes, fileName) {
-        includes = includes || ["modules_app"];
-        excludes = excludes || [];
-        fileName = fileName || "elixir-module.js";
-
+    modules({
+        includes = ["modules_app"],
+        excludes = [],
+        fileName = "elixir-module.js"
+    } = {}) {
         if (!Array.isArray(includes)) {
             includes = [includes];
+        }
+
+        if (!Array.isArray(excludes)) {
+            excludes = [excludes];
         }
 
         includes.forEach(baseDir => {
@@ -83,8 +90,18 @@ class ElixirConfig {
                 );
 
             modules.forEach(module => {
-                this.module(module);
+                this.module(module, {
+                    folderName: baseDir,
+                    fileName: this.withoutExtension(fileName)
+                });
             });
+        });
+    }
+
+    themes() {
+        return this.modules({
+            includes: ["modules_app/contentbox-custom/_themes"],
+            fileName: "elixir-theme.js"
         });
     }
 
