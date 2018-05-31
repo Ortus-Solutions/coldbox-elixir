@@ -28,7 +28,7 @@ class ElixirConfig {
         { folderName = "modules_app", fileName = "elixir-module" } = {}
     ) {
         const oldPrefix = this.prefix;
-        this.prefix = path.join(this.prefix, folderName, location, "/");
+        this.prefix = path.join(this.prefix, folderName, location, path.sep);
         const moduleRecipe = require(path.resolve(
             global.elixir.rootPath,
             this.prefix,
@@ -36,10 +36,10 @@ class ElixirConfig {
         ));
         moduleRecipe(this);
         const name = this.prefix
-            .split("/")
+            .split(path.sep)
             .filter(s => s !== "")
             .filter(s => s !== folderName)
-            .join("/");
+            .join(path.sep);
         this.mergeConfig({
             resolve: {
                 alias: {
