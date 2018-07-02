@@ -1,7 +1,6 @@
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const CleanObsoleteChunks = require("webpack-clean-obsolete-chunks");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
-const NpmInstallPlugin = require("npm-install-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");
@@ -120,7 +119,7 @@ module.exports = () => ({
             verbose: false
         }),
         new ManifestPlugin({
-            fileName: "includes/manifest.json"
+            fileName: "includes/rev-manifest.json"
         }),
         new MiniCssExtractPlugin({
             filename: global.elixir.versioning
