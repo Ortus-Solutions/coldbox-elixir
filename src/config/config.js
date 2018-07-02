@@ -105,6 +105,12 @@ class ElixirConfig {
         });
     }
 
+    contentbox() {
+        return this.modules({
+            includes: ["modules_app/contentbox-custom/_modules"]
+        });
+    }
+
     mergeConfig(config) {
         this.config = webpackMerge.smart(this.config, config);
         return this;
