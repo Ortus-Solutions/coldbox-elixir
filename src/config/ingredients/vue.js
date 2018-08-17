@@ -1,4 +1,3 @@
-const path = require("path");
 const cssLoaders = require("../../utils/cssLoaders");
 
 module.exports = function(
@@ -30,13 +29,26 @@ module.exports = function(
                     loader: "vue-loader",
                     exclude: /node_modules/,
                     options: {
-                        loaders: cssLoaders(
-                            // Add an entry point for each style sheet
-                            {
-                                sourceMap: true,
-                                extract: global.elixir.isProduction
-                            }
-                        )
+                        loaders: {
+                            js: [
+                                {
+                                    loader: "babel-loader",
+                                    options: {
+                                        presets: ["env"],
+                                        plugins: [
+                                            "transform-object-rest-spread"
+                                        ]
+                                    }
+                                }
+                            ],
+                            ...cssLoaders(
+                                // Add an entry point for each style sheet
+                                {
+                                    sourceMap: true,
+                                    extract: global.elixir.isProduction
+                                }
+                            )
+                        }
                     }
                 }
             ]
