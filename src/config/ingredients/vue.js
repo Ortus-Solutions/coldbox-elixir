@@ -1,4 +1,5 @@
 const cssLoaders = require("../../utils/cssLoaders");
+const webpackMerge = require("webpack-merge");
 
 module.exports = function(
     filename,
@@ -9,7 +10,7 @@ module.exports = function(
     } = {}
 ) {
     this.dependencies([
-        "babel-plugin-syntax-jsx",
+        "@babel/plugin-syntax-jsx",
         "babel-plugin-transform-vue-jsx",
         "babel-helper-vue-jsx-merge-props",
         "vue-loader@^14",
@@ -31,15 +32,26 @@ module.exports = function(
                     options: {
                         loaders: {
                             js: [
-                                {
-                                    loader: "babel-loader",
-                                    options: {
-                                        presets: ["env"],
+                                webpackMerge.smart(
+                                    global.elixir.config.babelOptions,
+                                    {
+                                        presets: [
+                                            [
+                                                "@babel/env",
+                                                {
+                                                    modules: false,
+                                                    targets: {
+                                                        browsers: ["> 2%"],
+                                                        uglify: true
+                                                    }
+                                                }
+                                            ]
+                                        ],
                                         plugins: [
-                                            "transform-object-rest-spread"
+                                            "@babel/plugin-proposal-object-rest-spread"
                                         ]
                                     }
-                                }
+                                )
                             ],
                             ...cssLoaders(
                                 // Add an entry point for each style sheet

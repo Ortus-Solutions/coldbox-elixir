@@ -134,7 +134,13 @@ class ElixirConfig {
         let missing = false;
         deps.forEach(dep => {
             try {
-                require.resolve(dep.split("@")[0]);
+                // account for package names that start with an `@`
+                const packageParts = dep.split("@");
+                let packageName = packageParts[0];
+                if (dep.startsWith("@") && packageParts.length > 2) {
+                    packageName = packageParts.slice(0, 1).join("");
+                }
+                require.resolve(packageName);
             } catch (e) {
                 missing = true;
                 this.missingDependencies.add(dep);
