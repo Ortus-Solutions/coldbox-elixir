@@ -137,8 +137,8 @@ class ElixirConfig {
                 // account for package names that start with an `@`
                 const packageParts = dep.split("@");
                 let packageName = packageParts[0];
-                if (dep.startsWith("@") && packageParts.length > 2) {
-                    packageName = packageParts.slice(0, 1).join("");
+                if (dep.startsWith("@")) {
+                    packageName = "@" + packageParts[1];
                 }
                 require.resolve(packageName);
             } catch (e) {
