@@ -36,17 +36,16 @@ module.exports = () => ({
                 options: webpackMerge.smart(global.elixir.config.babelOptions, {
                     presets: [
                         [
-                            "@babel/env",
+                            "env",
                             {
                                 modules: false,
                                 targets: {
-                                    browsers: ["> 2%"],
-                                    uglify: true
+                                    browsers: ["> 2%"]
                                 }
                             }
                         ]
                     ],
-                    plugins: ["@babel/plugin-proposal-object-rest-spread"]
+                    plugins: ["transform-object-rest-spread"]
                 })
             },
             {

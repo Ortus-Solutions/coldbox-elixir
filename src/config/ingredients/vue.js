@@ -10,8 +10,8 @@ module.exports = function(
     } = {}
 ) {
     this.dependencies([
-        "@babel/plugin-syntax-jsx",
-        "babel-plugin-transform-vue-jsx",
+        "babel-plugin-syntax-jsx",
+        "babel-plugin-transform-vue-jsx", // TODO: v4.0.0 released
         "babel-helper-vue-jsx-merge-props",
         "vue-loader@^14",
         "vue-template-compiler"
@@ -37,18 +37,17 @@ module.exports = function(
                                     {
                                         presets: [
                                             [
-                                                "@babel/env",
+                                                "env",
                                                 {
                                                     modules: false,
                                                     targets: {
-                                                        browsers: ["> 2%"],
-                                                        uglify: true
+                                                        browsers: ["> 2%"]
                                                     }
                                                 }
                                             ]
                                         ],
                                         plugins: [
-                                            "@babel/plugin-proposal-object-rest-spread"
+                                            "transform-object-rest-spread"
                                         ]
                                     }
                                 )
