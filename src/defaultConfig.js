@@ -36,7 +36,7 @@ module.exports = () => ({
                 options: webpackMerge.smart(global.elixir.config.babelOptions, {
                     presets: [
                         [
-                            "env",
+                            "@babel/preset-env",
                             {
                                 modules: false,
                                 targets: {
@@ -45,7 +45,7 @@ module.exports = () => ({
                             }
                         ]
                     ],
-                    plugins: ["transform-object-rest-spread"]
+                    plugins: ["@babel/plugin-proposal-object-rest-spread"]
                 })
             },
             {
@@ -92,9 +92,8 @@ module.exports = () => ({
         ? "#source-map"
         : "cheap-module-eval-source-map",
     resolve: {
-        extensions: [".js", ".vue", ".json"],
+        extensions: [".js", ".json"],
         alias: {
-            vue$: "vue/dist/vue.esm.js",
             "@": path.join(global.elixir.rootPath, "resources/assets/js")
         }
     },

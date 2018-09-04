@@ -1,5 +1,4 @@
-const cssLoaders = require("../../utils/cssLoaders");
-const webpackMerge = require("webpack-merge");
+const VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 module.exports = function(
     filename,
@@ -10,60 +9,33 @@ module.exports = function(
     } = {}
 ) {
     this.dependencies([
-        "babel-plugin-syntax-jsx",
-        "babel-plugin-transform-vue-jsx", // TODO: v4.0.0 released
-        "babel-helper-vue-jsx-merge-props",
-        "vue-loader@^14",
+        "@babel/plugin-syntax-jsx@^7",
+        "babel-plugin-transform-vue-jsx@next",
+        "babel-helper-vue-jsx-merge-props@^2",
+        "vue-loader@^15",
         "vue-template-compiler"
     ]);
     this.mergeBabelOptions({
-        plugins: ["transform-vue-jsx"]
+        plugins: ["babel-plugin-transform-vue-jsx"]
     });
     this.mergeConfig({
         resolve: {
-            extensions: [".vue"]
+            extensions: [".vue"],
+            alias: {
+                vue$: "vue/dist/vue.esm.js"
+            }
         },
         module: {
             rules: [
                 {
                     test: /\.vue$/,
                     loader: "vue-loader",
-                    exclude: /node_modules/,
-                    options: {
-                        loaders: {
-                            js: [
-                                webpackMerge.smart(
-                                    global.elixir.config.babelOptions,
-                                    {
-                                        presets: [
-                                            [
-                                                "env",
-                                                {
-                                                    modules: false,
-                                                    targets: {
-                                                        browsers: ["> 2%"]
-                                                    }
-                                                }
-                                            ]
-                                        ],
-                                        plugins: [
-                                            "transform-object-rest-spread"
-                                        ]
-                                    }
-                                )
-                            ],
-                            ...cssLoaders(
-                                // Add an entry point for each style sheet
-                                {
-                                    sourceMap: true,
-                                    extract: global.elixir.isProduction
-                                }
-                            )
-                        }
-                    }
+                    exclude: file =>
+                        /node_modules/.test(file) && !/\.vue\.js/.test(file)
                 }
             ]
-        }
+        },
+        plugins: [new VueLoaderPlugin()]
     });
     return this.js(filename, {
         name,
