@@ -131,22 +131,23 @@ class ElixirConfig {
     }
 
     dependencies(deps) {
-        let missing = false;
+        let anyMissing = false;
         deps.forEach(dep => {
-            try {
-                // account for package names that start with an `@`
-                const packageParts = dep.split("@");
-                let packageName = packageParts[0];
-                if (dep.startsWith("@")) {
-                    packageName = "@" + packageParts[1];
-                }
-                require.resolve(packageName);
-            } catch (e) {
-                missing = true;
+            // account for package names that start with an `@`
+            const packageParts = dep.split("@");
+            let packageName = packageParts[0];
+            if (dep.startsWith("@")) {
+                packageName = "@" + packageParts[1];
+            }
+            const moduleFound = detectInstalled.sync(packageName, {
+                local: true
+            });
+            if (!moduleFound) {
+                anyMissing = true;
                 this.missingDependencies.add(dep);
             }
         });
-        return missing;
+        return anyMissing;
     }
 
     installMissingDependencies() {
