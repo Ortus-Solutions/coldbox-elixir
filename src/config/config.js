@@ -1,6 +1,7 @@
 const CleanWebpackPlugin = require("clean-webpack-plugin");
-const webpackMerge = require("webpack-merge");
+const detectInstalled = require("detect-installed");
 const exec = require("child_process").execSync;
+const webpackMerge = require("webpack-merge");
 const path = require("path");
 const fs = require("fs");
 
