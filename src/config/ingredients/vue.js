@@ -1,5 +1,3 @@
-const VueLoaderPlugin = require("vue-loader/lib/plugin");
-
 module.exports = function(
     filename,
     {
@@ -8,6 +6,11 @@ module.exports = function(
         sourceDirectory = "resources/assets/js/"
     } = {}
 ) {
+    let VueLoaderPlugin = class {};
+    try {
+        VueLoaderPlugin = require("vue-loader/lib/plugin");
+    } catch (e) {}
+
     this.dependencies([
         "@babel/plugin-syntax-jsx@^7",
         "babel-plugin-transform-vue-jsx@next",
