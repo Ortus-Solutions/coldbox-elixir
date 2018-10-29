@@ -18,11 +18,13 @@ module.exports = function(
     try {
         VueLoaderPlugin = require("vue-loader/lib/plugin");
     } catch (e) {
-        require("vue-loader");
-        console.error(`vue-loader 15+ is required for use with this library
+        try {
+            require("vue-loader");
+            console.error(`vue-loader 15+ is required for use with this library
 but we weren't able to load it.
 You probably have an old version of vue-loader installed.
 Make sure all old versions are uninstalled and then try again.`);
+        } catch (e) {}
     }
 
     // paths are declared out here to avoid `this` changing from under us
