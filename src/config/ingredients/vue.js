@@ -6,6 +6,14 @@ module.exports = function(
         sourceDirectory = "resources/assets/js/"
     } = {}
 ) {
+    this.dependencies([
+        "@babel/plugin-syntax-jsx@^7",
+        "babel-plugin-transform-vue-jsx@next",
+        "babel-helper-vue-jsx-merge-props@^2",
+        "vue-loader@^15",
+        "vue-template-compiler"
+    ]);
+
     let VueLoaderPlugin = class EmptyVueLoaderPlugin {};
     try {
         VueLoaderPlugin = require("vue-loader/lib/plugin");
@@ -17,13 +25,6 @@ You probably have an old version of vue-loader installed.
 Make sure all old versions are uninstalled and then try again.`);
     }
 
-    this.dependencies([
-        "@babel/plugin-syntax-jsx@^7",
-        "babel-plugin-transform-vue-jsx@next",
-        "babel-helper-vue-jsx-merge-props@^2",
-        "vue-loader@^15",
-        "vue-template-compiler"
-    ]);
     // paths are declared out here to avoid `this` changing from under us
     const fullOutputPath =
         this.prefix + outputDirectory.replace("/js/", "/css/");
