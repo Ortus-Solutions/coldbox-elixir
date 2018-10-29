@@ -1,5 +1,6 @@
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const CleanObsoleteChunks = require("webpack-clean-obsolete-chunks");
+const FilterChunkPlugin = require("filter-chunk-webpack-plugin");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
@@ -115,6 +116,10 @@ module.exports = () => ({
         ),
         new CleanObsoleteChunks({
             verbose: false
+        }),
+        new FilterChunkPlugin({
+            patterns: ["**/css/*.css"],
+            select: true
         }),
         new ManifestPlugin({
             fileName: "includes/rev-manifest.json"

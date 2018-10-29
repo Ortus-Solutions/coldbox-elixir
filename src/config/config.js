@@ -11,6 +11,7 @@ class ElixirConfig {
         this.babelOptions = {};
         this.missingDependencies = new Set();
         this.prefix = "";
+        this.onces = new Set();
         return this;
     }
 
@@ -123,7 +124,7 @@ class ElixirConfig {
         } else if (m.name) {
             return m.name;
         } else {
-            return false;
+            return m.nameForCondition();
         }
     }
 
@@ -189,10 +190,18 @@ class ElixirConfig {
             .join(".");
     }
 
+    once(key, callback) {
+        if (!this.onces.has(key)) {
+            this.onces.add(key);
+            callback();
+        }
+    }
+
     reset() {
         this.config = {};
         this.missingDependencies.clear();
         this.prefix = "";
+        this.onces = new Set();
         return this;
     }
 }
