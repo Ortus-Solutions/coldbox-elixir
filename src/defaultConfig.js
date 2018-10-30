@@ -118,8 +118,7 @@ module.exports = () => ({
             verbose: false
         }),
         new FilterChunkPlugin({
-            patterns: ["**/css/*.css"],
-            select: true
+            patterns: ["**/css/*.*", "!**/css/*.css"]
         }),
         new ManifestPlugin({
             fileName: "includes/rev-manifest.json"
