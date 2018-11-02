@@ -6,13 +6,17 @@ module.exports = function(
         sourceDirectory = "resources/assets/js/"
     } = {}
 ) {
-    this.dependencies([
-        "@babel/plugin-syntax-jsx@^7",
-        "babel-plugin-transform-vue-jsx@next",
-        "babel-helper-vue-jsx-merge-props@^2",
-        "vue-loader@^15",
-        "vue-template-compiler"
-    ]);
+    if (
+        this.dependencies([
+            "@babel/plugin-syntax-jsx@^7",
+            "babel-plugin-transform-vue-jsx@next",
+            "babel-helper-vue-jsx-merge-props@^2",
+            "vue-loader@^15",
+            "vue-template-compiler"
+        ])
+    ) {
+        return;
+    }
 
     let VueLoaderPlugin = class EmptyVueLoaderPlugin {};
     try {
@@ -27,31 +31,6 @@ Make sure all old versions are uninstalled and then try again.`);
         } catch (e) {}
     }
 
-    // paths are declared out here to avoid `this` changing from under us
-    const fullOutputPath =
-        this.prefix + outputDirectory.replace("/js/", "/css/");
-    const fullSourcePath = this.prefix + sourceDirectory;
-    this.mergeConfig({
-        optimization: {
-            splitChunks: {
-                cacheGroups: {
-                    [fullOutputPath + name]: {
-                        name: fullOutputPath + name,
-                        test: (m, c, entry = name) => {
-                            return (
-                                m.constructor.name === "CssModule" &&
-                                this.recursiveIssuer(m).includes(
-                                    fullSourcePath + filename
-                                )
-                            );
-                        },
-                        chunks: "all",
-                        enforce: true
-                    }
-                }
-            }
-        }
-    });
     this.once("vue", () => {
         this.mergeBabelOptions({
             plugins: ["babel-plugin-transform-vue-jsx"]
