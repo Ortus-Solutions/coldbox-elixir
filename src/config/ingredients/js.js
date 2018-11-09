@@ -1,3 +1,4 @@
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 const path = require("path");
 
 module.exports = function(
@@ -8,7 +9,8 @@ module.exports = function(
         entryDirectory = "resources/assets/js/"
     } = {}
 ) {
-    const chunkName = path.join(this.prefix, outputDirectory, name);
+    const chunkPath = path.join(this.prefix, outputDirectory);
+    const chunkName = path.join(chunkPath, name);
     const srcName = Array.isArray(filename)
         ? filename.map(file =>
               path.resolve(
@@ -28,6 +30,12 @@ module.exports = function(
     return this.mergeConfig({
         entry: {
             [chunkName]: srcName
-        }
+        },
+        plugins: [
+            new CleanWebpackPlugin([chunkPath], {
+                root: global.elixir.rootPath,
+                verbose: false
+            })
+        ]
     });
 };

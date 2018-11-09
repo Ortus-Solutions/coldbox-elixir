@@ -99,11 +99,9 @@ module.exports = () => ({
         // add these based on what features are enabled
         new CleanWebpackPlugin(
             [
-                "includes/js",
-                "includes/css",
-                "includes/fonts",
-                "includes/media",
-                "includes/images"
+                global.elixir.manifestFileName,
+                global.elixir.runtimeFileNameWithoutExtension,
+                global.elixir.vendorChunkFileNameWithoutExtension
             ],
             {
                 root: global.elixir.rootPath,
@@ -114,7 +112,7 @@ module.exports = () => ({
             verbose: false
         }),
         new ManifestPlugin({
-            fileName: "includes/rev-manifest.json"
+            fileName: global.elixir.manifestFileName
         }),
         new MiniCssExtractPlugin({
             filename: global.elixir.versioning
@@ -134,7 +132,7 @@ module.exports = () => ({
     },
     optimization: {
         runtimeChunk: {
-            name: "includes/js/runtime"
+            name: global.elixir.runtimeFileNameWithoutExtension
         },
         splitChunks: {
             cacheGroups: {
@@ -145,7 +143,7 @@ module.exports = () => ({
                             /[\\/]node_modules[\\/]/.test(m.resource)
                         );
                     },
-                    name: "includes/js/vendor",
+                    name: global.elixir.vendorChunkFileNameWithoutExtension,
                     enforce: true,
                     chunks: "all"
                 }

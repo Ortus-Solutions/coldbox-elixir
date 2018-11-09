@@ -1,4 +1,3 @@
-const CleanWebpackPlugin = require("clean-webpack-plugin");
 const detectInstalled = require("detect-installed");
 const exec = require("child_process").execSync;
 const webpackMerge = require("webpack-merge");
@@ -50,13 +49,7 @@ class ElixirConfig {
                         `./${this.prefix}/resources/assets/js`
                     )
                 }
-            },
-            plugins: [
-                new CleanWebpackPlugin(
-                    [`${this.prefix}includes/js`, `${this.prefix}includes/css`],
-                    { root: global.elixir.rootPath, verbose: false }
-                )
-            ]
+            }
         });
         this.prefix = oldPrefix;
         return this;

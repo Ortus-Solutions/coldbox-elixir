@@ -13,5 +13,8 @@ elixir.isProduction = global.process.argv.includes("-p");
 elixir.rootPath = path.resolve(__dirname, "../../../");
 elixir.config = new ElixirConfig();
 elixir.versioning = elixir.isProduction;
+elixir.manifestFileName = "includes/rev-manifest.json";
+elixir.runtimeFileNameWithoutExtension = "includes/js/runtime";
+elixir.vendorChunkFileNameWithoutExtension = "includes/js/vendor";
 
 module.exports = global.elixir = elixir;
