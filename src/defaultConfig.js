@@ -2,9 +2,9 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const CleanObsoleteChunks = require("webpack-clean-obsolete-chunks");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const styleLoaders = require("./utils/styleLoaders");
 const webpackMerge = require("webpack-merge");
 const webpack = require("webpack");
@@ -97,17 +97,13 @@ module.exports = () => ({
     plugins: [
         new ProgressBarPlugin(),
         // add these based on what features are enabled
-        new CleanWebpackPlugin(
-            [
+        new CleanWebpackPlugin({
+            cleanOnceBeforeBuildPatterns: [
                 global.elixir.manifestFileName,
                 global.elixir.runtimeFileNameWithoutExtension,
                 global.elixir.vendorChunkFileNameWithoutExtension
-            ],
-            {
-                root: global.elixir.rootPath,
-                verbose: false
-            }
-        ),
+            ]
+        }),
         new CleanObsoleteChunks({
             verbose: false
         }),
@@ -150,10 +146,10 @@ module.exports = () => ({
             }
         },
         minimizer: [
-            new UglifyJsPlugin({
+            new TerserPlugin({
                 cache: true,
                 parallel: true,
-                sourceMap: true // set to true if you want JS source maps
+                sourceMap: true
             }),
             new OptimizeCSSAssetsPlugin({})
         ]

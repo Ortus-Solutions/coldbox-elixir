@@ -1,5 +1,5 @@
 const WebpackDeleteAfterEmit = require("webpack-delete-after-emit");
-const CleanWebpackPlugin = require("clean-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const path = require("path");
 
 module.exports = function(
@@ -48,9 +48,8 @@ module.exports = function(
                     `${expandedOutputDirectory}/*.js.map`
                 ]
             }),
-            new CleanWebpackPlugin([expandedOutputDirectory], {
-                root: global.elixir.rootPath,
-                verbose: false
+            new CleanWebpackPlugin({
+                cleanOnceBeforeBuildPatterns: [expandedOutputDirectory]
             })
         ]
     });

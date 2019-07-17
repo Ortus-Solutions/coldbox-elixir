@@ -1,4 +1,4 @@
-const CleanWebpackPlugin = require("clean-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const path = require("path");
 
 module.exports = function(
@@ -32,9 +32,8 @@ module.exports = function(
             [chunkName]: srcName
         },
         plugins: [
-            new CleanWebpackPlugin([chunkPath], {
-                root: global.elixir.rootPath,
-                verbose: false
+            new CleanWebpackPlugin({
+                cleanOnceBeforeBuildPatterns: [chunkPath]
             })
         ]
     });

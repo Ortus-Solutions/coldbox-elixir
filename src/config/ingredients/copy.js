@@ -1,4 +1,4 @@
-const CleanWebpackPlugin = require("clean-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = function(from, to) {
     if (this.dependencies(["copy-webpack-plugin"])) {
@@ -8,10 +8,7 @@ module.exports = function(from, to) {
     return this.mergeConfig({
         plugins: [
             new CopyWebpackPlugin([{ from, to }]),
-            new CleanWebpackPlugin([to], {
-                root: global.elixir.rootPath,
-                verbose: false
-            })
+            new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: [to] })
         ]
     });
 };
