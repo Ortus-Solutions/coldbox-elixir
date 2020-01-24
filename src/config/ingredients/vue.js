@@ -3,7 +3,7 @@ module.exports = function(
     {
         name = this.withoutExtension(filename),
         outputDirectory = "includes/js/",
-        sourceDirectory = "resources/assets/js/"
+        entryDirectory = "resources/assets/js/"
     } = {}
 ) {
     if (
@@ -58,6 +58,6 @@ Make sure all old versions are uninstalled and then try again.`);
     return this.js(filename, {
         name,
         outputDirectory,
-        sourceDirectory
+        entryDirectory
     });
 };
