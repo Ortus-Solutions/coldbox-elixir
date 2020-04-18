@@ -9,8 +9,8 @@ module.exports = function(
     if (
         this.dependencies([
             "@babel/plugin-syntax-jsx@^7",
-            "@vue/babel-plugin-transform-vue-jsx@next",
-            "@vue/babel-helper-vue-jsx-merge-props@next",
+            "@vue/babel-plugin-transform-vue-jsx@^1",
+            "@vue/babel-helper-vue-jsx-merge-props@^1",
             "vue-loader@^15",
             "vue-template-compiler"
         ])
