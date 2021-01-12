@@ -7,7 +7,6 @@ const ManifestPlugin = require("webpack-manifest-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const styleLoaders = require("./utils/styleLoaders");
 const webpackMerge = require("webpack-merge");
-const webpack = require("webpack");
 const path = require("path");
 const fs = require("fs");
 
@@ -115,13 +114,6 @@ module.exports = () => ({
                 ? "[name].[contenthash].css"
                 : "[name].css"
         }),
-        new webpack.DefinePlugin({
-            // stringify each value so webpack doesn't insert variables instead of strings
-            "process.env": Object.keys(process.env).reduce((obj, key) => {
-                obj[key] = JSON.stringify(process.env[key]);
-                return obj;
-            }, {})
-        })
     ],
     stats: {
         children: false
