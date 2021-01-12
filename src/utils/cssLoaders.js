@@ -11,7 +11,10 @@ module.exports = function cssLoaders(options = {}) {
     };
 
     const resolveUrlLoader = {
-        loader: "resolve-url-loader"
+        loader: "resolve-url-loader",
+        options: {
+            removeCR: true
+        }
     };
 
     const postcssLoader = {
