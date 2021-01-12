@@ -6,6 +6,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const styleLoaders = require("./utils/styleLoaders");
+const { EnvironmentPlugin } = require("webpack");
 const webpackMerge = require("webpack-merge");
 const path = require("path");
 const fs = require("fs");
@@ -113,6 +114,9 @@ module.exports = () => ({
             filename: global.elixir.versioning
                 ? "[name].[contenthash].css"
                 : "[name].css"
+        }),
+        new EnvironmentPlugin({
+            "NODE_ENV": global.elixir.isProduction ? "production" : "development"
         }),
     ],
     stats: {
