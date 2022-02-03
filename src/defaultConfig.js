@@ -86,9 +86,16 @@ module.exports = () => ({
         )
     },
     devtool: global.elixir.isProduction
-        ? "#source-map"
+        ? "source-map$"
         : "cheap-module-eval-source-map",
     resolve: {
+        fallback: {
+            dgram: false,
+            fs: false,
+            net: false,
+            tls: false,
+            child_process: false
+        },
         extensions: [".js", ".json"],
         alias: {
             "@": path.join(global.elixir.rootPath, "resources/assets/js")
@@ -149,17 +156,5 @@ module.exports = () => ({
             }),
             new OptimizeCSSAssetsPlugin({})
         ]
-    },
-    node: {
-        // prevent webpack from injecting useless setImmediate polyfill because Vue
-        // source contains it (although only uses it if it's native).
-        setImmediate: false,
-        // prevent webpack from injecting mocks to Node native modules
-        // that does not make sense for the client
-        dgram: "empty",
-        fs: "empty",
-        net: "empty",
-        tls: "empty",
-        child_process: "empty"
     }
 });
