@@ -9,7 +9,7 @@ module.exports = function(
     if (
         this.dependencies([
             "@vue/babel-plugin-jsx",
-            "vue-loader@^15",
+            "vue-loader@^17",
             "@vue/compiler-sfc"
         ])
     ) {
@@ -21,12 +21,13 @@ module.exports = function(
         VueLoaderPlugin = require("vue-loader/lib/plugin");
     } catch (e) {
         try {
-            require("vue-loader");
-            console.error(`vue-loader 15+ is required for use with this library
+            require( "vue-loader" );
+        } catch (e) {
+            console.error(`vue-loader 17+ is required for use with this library
 but we weren't able to load it.
 You probably have an old version of vue-loader installed.
 Make sure all old versions are uninstalled and then try again.`);
-        } catch (e) {}
+        }
     }
 
     this.once("vue", () => {

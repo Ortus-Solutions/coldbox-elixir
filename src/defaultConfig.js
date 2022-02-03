@@ -1,4 +1,4 @@
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const CleanObsoleteChunks = require("webpack-clean-obsolete-chunks");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -45,37 +45,34 @@ module.exports = () => ({
                             }
                         ]
                     ],
-                    plugins: ["@babel/plugin-proposal-object-rest-spread"]
+                    plugins: [ "@babel/plugin-proposal-object-rest-spread"]
                 })
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-                loader: "url-loader",
-                options: {
-                    limit: 10000,
-                    name: global.elixir.versioning
-                        ? "includes/images/[name].[hash:7].[ext]"
-                        : "includes/images/[name].[ext]"
+                type: "asset",
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 1000000 // 1000 kb
+                    }
                 }
             },
             {
                 test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-                loader: "url-loader",
-                options: {
-                    limit: 10000,
-                    name: global.elixir.versioning
-                        ? "includes/media/[name].[hash:7].[ext]"
-                        : "includes/media/[name].[ext]"
+                type: "asset",
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 1000000 // 1000 kb
+                    }
                 }
             },
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                loader: "url-loader",
-                options: {
-                    limit: 10000,
-                    name: global.elixir.versioning
-                        ? "includes/fonts/[name].[hash:7].[ext]"
-                        : "includes/fonts/[name].[ext]"
+                type: "asset",
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 1000000 // 1000 kb
+                    }
                 }
             }
         ].concat(
@@ -85,7 +82,9 @@ module.exports = () => ({
             })
         )
     },
-    devtool: "source-map",
+    devtool: global.elixir.isProduction
+                ? "source-map"
+                : "eval-cheap-module-source-map",
     resolve: {
         fallback: {
             dgram: false,
@@ -152,7 +151,7 @@ module.exports = () => ({
                 parallel: true,
                 sourceMap: true
             }),
-            new OptimizeCSSAssetsPlugin({})
+            new CssMinimizerPlugin()
         ]
     }
 });

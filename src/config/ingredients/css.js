@@ -12,9 +12,7 @@ module.exports = function(
 ) {
     this.dependencies([
         "css-loader",
-        "postcss-loader",
-        "url-loader",
-        "file-loader"
+        "postcss-loader"
     ]);
     const expandedOutputDirectory = path.join(this.prefix, outputDirectory);
     const chunkName = path.join(expandedOutputDirectory, name);
