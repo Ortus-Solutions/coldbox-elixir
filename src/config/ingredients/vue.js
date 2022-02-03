@@ -8,11 +8,9 @@ module.exports = function(
 ) {
     if (
         this.dependencies([
-            "@babel/plugin-syntax-jsx@^7",
-            "@vue/babel-plugin-transform-vue-jsx@^1",
-            "@vue/babel-helper-vue-jsx-merge-props@^1",
+            "@vue/babel-plugin-jsx",
             "vue-loader@^15",
-            "vue-template-compiler"
+            "@vue/compiler-sfc"
         ])
     ) {
         return;
@@ -33,7 +31,7 @@ Make sure all old versions are uninstalled and then try again.`);
 
     this.once("vue", () => {
         this.mergeBabelOptions({
-            plugins: ["@vue/babel-plugin-transform-vue-jsx"]
+            plugins: ["@vue/babel-plugin-jsx"]
         });
         this.mergeConfig({
             resolve: {
