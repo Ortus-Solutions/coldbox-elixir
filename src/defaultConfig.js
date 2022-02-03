@@ -86,7 +86,7 @@ module.exports = () => ({
         )
     },
     devtool: global.elixir.isProduction
-        ? "source-map$"
+        ? "source-map"
         : "cheap-module-eval-source-map",
     resolve: {
         fallback: {
