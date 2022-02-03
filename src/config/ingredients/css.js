@@ -1,4 +1,3 @@
-const WebpackDeleteAfterEmit = require("webpack-delete-after-emit");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const path = require("path");
 
@@ -40,12 +39,6 @@ module.exports = function(
             }
         },
         plugins: [
-            new WebpackDeleteAfterEmit({
-                globs: [
-                    `${expandedOutputDirectory}/*.js`,
-                    `${expandedOutputDirectory}/*.js.map`
-                ]
-            }),
             new CleanWebpackPlugin({
                 cleanOnceBeforeBuildPatterns: [expandedOutputDirectory]
             })

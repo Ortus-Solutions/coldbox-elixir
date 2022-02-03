@@ -3,11 +3,10 @@ const CleanObsoleteChunks = require("webpack-clean-obsolete-chunks");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const ManifestPlugin = require("webpack-manifest-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
+const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const styleLoaders = require("./utils/styleLoaders");
 const { EnvironmentPlugin } = require("webpack");
-const webpackMerge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 const path = require("path");
 const fs = require("fs");
 
@@ -33,7 +32,7 @@ module.exports = () => ({
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
                 loader: "babel-loader",
-                options: webpackMerge.smart(global.elixir.config.babelOptions, {
+                options: merge(global.elixir.config.babelOptions, {
                     presets: [
                         [
                             "@babel/preset-env",
@@ -111,7 +110,7 @@ module.exports = () => ({
         new CleanObsoleteChunks({
             verbose: false
         }),
-        new ManifestPlugin({
+        new WebpackManifestPlugin({
             fileName: global.elixir.manifestFileName
         }),
         new MiniCssExtractPlugin({
@@ -146,11 +145,14 @@ module.exports = () => ({
             }
         },
         minimizer: [
-            new TerserPlugin({
-                cache: true,
-                parallel: true,
-                sourceMap: true
-            }),
+            ( compiler ) => {
+                const TerserPlugin = require('terser-webpack-plugin');
+                new TerserPlugin({
+                  terserOptions: {
+                    compress: {},
+                  }
+                }).apply( compiler );
+            },
             new CssMinimizerPlugin()
         ]
     }

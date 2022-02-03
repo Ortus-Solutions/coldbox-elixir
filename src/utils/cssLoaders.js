@@ -13,7 +13,8 @@ module.exports = function cssLoaders(options = {}) {
     const resolveUrlLoader = {
         loader: "resolve-url-loader",
         options: {
-            removeCR: true
+            removeCR: true,
+            root: global.elixir.rootPath
         }
     };
 
@@ -59,8 +60,9 @@ module.exports = function cssLoaders(options = {}) {
         css: generateLoaders(),
         postcss: generateLoaders(),
         less: generateLoaders("less"),
-        sass: generateLoaders("sass", { indentedSyntax: true }),
-        scss: generateLoaders("sass"),
+        // The sourceMap option has to be true for resolve-url-loader
+        sass: generateLoaders("sass", { sourceMap: true } ),
+        scss: generateLoaders("sass", { sourceMap: true } ),
         stylus: generateLoaders("stylus"),
         styl: generateLoaders("stylus")
     };
