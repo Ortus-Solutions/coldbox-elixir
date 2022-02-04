@@ -34,13 +34,16 @@ module.exports = function(
                     {
                         test: /\.vue$/,
                         loader: "vue-loader",
+                        options: {
+                            sourceMap: true
+                        },
                         exclude: file =>
                             /node_modules/.test(file) && !/\.vue\.js/.test(file)
                     }
                 ]
             },
             plugins: [
-                new VueLoaderPlugin()
+                new VueLoaderPlugin( { options: { sourceMap: true } )
             ]
         });
     });

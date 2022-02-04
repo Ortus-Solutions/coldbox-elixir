@@ -3,10 +3,11 @@ const path = require("path");
 const fs = require("fs");
 
 module.exports = function cssLoaders(options = {}) {
+
     const cssLoader = {
         loader: "css-loader",
-        options: {
-            sourceMap: options.sourceMap
+        options : {
+            sourceMap : true
         }
     };
 
@@ -20,8 +21,8 @@ module.exports = function cssLoaders(options = {}) {
 
     const postcssLoader = {
         loader: "postcss-loader",
-        options: {
-            sourceMap: options.sourceMap
+        options : {
+            sourceMap : true
         }
     };
 
@@ -31,19 +32,23 @@ module.exports = function cssLoaders(options = {}) {
 
     // generate loader string to be used with extract text plugin
     function generateLoaders(loader, loaderOptions) {
-        const loaders = [cssLoader, resolveUrlLoader];
+        const loaders = [ cssLoader, resolveUrlLoader ];
 
         if (shouldUsePostCSSLoader) {
             loaders.push(postcssLoader);
         }
 
         if (loader) {
-            loaders.push({
+            let def = {
                 loader: loader + "-loader",
-                options: Object.assign({}, loaderOptions, {
-                    sourceMap: options.sourceMap
-                })
-            });
+                options: Object.assign( { sourceMap : true }, loaderOptions )
+            };
+
+            if( loader == 'sass' ){
+                def.options[ "implementation" ] = require( "sass" );
+            }
+
+            loaders.push( def );
         }
 
         // Extract CSS when that option is specified
@@ -51,7 +56,7 @@ module.exports = function cssLoaders(options = {}) {
         if (options.extract) {
             return [MiniCssExtractPlugin.loader].concat(loaders);
         } else {
-            return ["vue-style-loader"].concat(loaders);
+            return loaders;
         }
     }
 
@@ -61,8 +66,8 @@ module.exports = function cssLoaders(options = {}) {
         postcss: generateLoaders(),
         less: generateLoaders("less"),
         // The sourceMap option has to be true for resolve-url-loader
-        sass: generateLoaders("sass", { sourceMap: true } ),
-        scss: generateLoaders("sass", { sourceMap: true } ),
+        sass: generateLoaders("sass" ),
+        scss: generateLoaders("sass" ),
         stylus: generateLoaders("stylus"),
         styl: generateLoaders("stylus")
     };

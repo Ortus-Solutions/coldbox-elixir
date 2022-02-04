@@ -33,6 +33,7 @@ module.exports = () => ({
                 exclude: /node_modules/,
                 loader: "babel-loader",
                 options: merge(global.elixir.config.babelOptions, {
+                    sourceMap : true,
                     presets: [
                         [
                             "@babel/preset-env",
@@ -70,7 +71,7 @@ module.exports = () => ({
                 type: "asset",
                 parser: {
                     dataUrlCondition: {
-                        maxSize: 1000000 // 1000 kb
+                        maxSize: 10000000 // 10000 kb
                     }
                 }
             }
@@ -90,7 +91,9 @@ module.exports = () => ({
             fs: false,
             net: false,
             tls: false,
-            child_process: false
+            child_process: false,
+            timers: require.resolve("timers-browserify"),
+            path: require.resolve("path-browserify")
         },
         extensions: [".js", ".json"],
         alias: {
