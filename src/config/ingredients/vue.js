@@ -11,8 +11,7 @@ module.exports = function(
     if (
         this.dependencies([
             "@vue/babel-plugin-jsx",
-            "vue-loader@^17",
-            "@vue/compiler-sfc"
+            "vue-loader@^17"
         ])
     ) {
         return;
@@ -43,7 +42,7 @@ module.exports = function(
                 ]
             },
             plugins: [
-                new VueLoaderPlugin( { options: { sourceMap: true } )
+                new VueLoaderPlugin( { options: { sourceMap: true } } )
             ]
         });
     });

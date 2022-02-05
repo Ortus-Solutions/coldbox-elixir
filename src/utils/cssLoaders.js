@@ -53,11 +53,11 @@ module.exports = function cssLoaders(options = {}) {
 
         // Extract CSS when that option is specified
         // (which is the case during production build)
-        if (options.extract) {
-            return [MiniCssExtractPlugin.loader].concat(loaders);
-        } else {
+        // if (options.extract) {
+        //     return [MiniCssExtractPlugin.loader].concat(loaders);
+        // } else {
             return loaders;
-        }
+        // }
     }
 
     // https://vue-loader.vuejs.org/en/configurations/extract-css.html

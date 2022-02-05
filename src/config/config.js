@@ -102,7 +102,7 @@ class ElixirConfig {
 
     contentbox() {
         return this.modules({
-            includes: ["modules_app/contentbox-custom/_modules"]
+            includes: [ "modules_app/contentbox-custom/_modules" ]
         });
     }
 
