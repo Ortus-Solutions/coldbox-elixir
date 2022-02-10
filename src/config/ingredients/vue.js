@@ -49,7 +49,7 @@ module.exports = function(
                     __VUE_OPTIONS_API__: global.elixir.isProduction,
                     __VUE_PROD_DEVTOOLS__: !global.elixir.isProduction,
                 }),
-                new VueLoaderPlugin( { options: { sourceMap: true } )
+                new VueLoaderPlugin( { options: { sourceMap: true } } )
             ]
         });
     });
