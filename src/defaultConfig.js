@@ -27,11 +27,18 @@ module.exports = () => ({
             : "[name].js"
     },
     module: {
+        parser: {
+            javascript: {
+              exportsPresence: global.elixir.isProduction ? false : 'auto',
+              importExportsPresence : global.elixir.isProduction ? false : 'auto'
+            }
+        },
         rules: [
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
                 loader: "babel-loader",
+                use : [ "source-map-loader" ],
                 options: merge(global.elixir.config.babelOptions, {
                     sourceMap : true,
                     presets: [
@@ -84,7 +91,7 @@ module.exports = () => ({
     },
     devtool: global.elixir.isProduction
                 ? "source-map"
-                : "eval-cheap-module-source-map",
+                : "eval-source-map",
     resolve: {
         fallback: {
             dgram: false,
