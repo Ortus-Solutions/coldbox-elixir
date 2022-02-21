@@ -3,6 +3,9 @@ const path = require("path");
 const fs = require("fs");
 
 module.exports = function cssLoaders(options = {}) {
+    const styleLoader = {
+        loader: "style-loader"
+    };
 
     const cssLoader = {
         loader: "css-loader",
@@ -32,7 +35,7 @@ module.exports = function cssLoaders(options = {}) {
 
     // generate loader string to be used with extract text plugin
     function generateLoaders(loader, loaderOptions) {
-        const loaders = [ cssLoader, resolveUrlLoader ];
+        let loaders = [ cssLoader, resolveUrlLoader ];
 
         if (shouldUsePostCSSLoader) {
             loaders.push(postcssLoader);
@@ -44,6 +47,10 @@ module.exports = function cssLoaders(options = {}) {
                 options: Object.assign( { sourceMap : true }, loaderOptions )
             };
 
+            if( loader == 'css' ){
+                def.type = "asset/source";
+            }
+
             if( loader == 'sass' ){
                 def.options[ "implementation" ] = require( "sass" );
             }
@@ -53,15 +60,15 @@ module.exports = function cssLoaders(options = {}) {
 
         // Extract CSS when that option is specified
         // (which is the case during production build)
-        // if (options.extract) {
-        //     return [MiniCssExtractPlugin.loader].concat(loaders);
-        // } else {
+        if (options.extract) {
+            return [MiniCssExtractPlugin.loader].concat(loaders);
+        } else {
             return loaders;
-        // }
+        }
     }
 
     // https://vue-loader.vuejs.org/en/configurations/extract-css.html
-    return {
+    let styleLoaders = {
         css: generateLoaders(),
         postcss: generateLoaders(),
         less: generateLoaders("less"),
@@ -71,4 +78,6 @@ module.exports = function cssLoaders(options = {}) {
         stylus: generateLoaders("stylus"),
         styl: generateLoaders("stylus")
     };
+    
+    return styleLoaders;
 };

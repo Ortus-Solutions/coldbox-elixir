@@ -1,5 +1,6 @@
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const path = require("path");
+const fs = require("fs");
 
 module.exports = function(
     filename,
@@ -9,10 +10,12 @@ module.exports = function(
         entryDirectory = "resources/assets/css/"
     } = {}
 ) {
-    this.dependencies([
-        "css-loader",
-        "postcss-loader"
-    ]);
+
+    let dependencies = [ "css-loader" ];
+    if( fs.existsSync( path.join(global.elixir.rootPath, "postcss.config.js") ) ){
+        dependencies.push( "postcss-loader" );
+    }
+    
     const expandedOutputDirectory = path.join(this.prefix, outputDirectory);
     const chunkName = path.join(expandedOutputDirectory, name);
     const srcName = Array.isArray(filename)

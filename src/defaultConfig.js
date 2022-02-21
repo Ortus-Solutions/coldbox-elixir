@@ -2,10 +2,10 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const CleanObsoleteChunks = require("webpack-clean-obsolete-chunks");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const styleLoaders = require("./utils/styleLoaders");
-const { EnvironmentPlugin } = require("webpack");
 const { merge } = require("webpack-merge");
 const path = require("path");
 const fs = require("fs");
@@ -38,7 +38,6 @@ module.exports = () => ({
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
                 loader: "babel-loader",
-                use : [ "source-map-loader" ],
                 options: merge(global.elixir.config.babelOptions, {
                     sourceMap : true,
                     presets: [
@@ -126,10 +125,7 @@ module.exports = () => ({
             filename: global.elixir.versioning
                 ? "[name].[contenthash].css"
                 : "[name].css"
-        }),
-        new EnvironmentPlugin({
-            "NODE_ENV": global.elixir.isProduction ? "production" : "development"
-        }),
+        })
     ],
     stats: {
         children: false
@@ -140,7 +136,7 @@ module.exports = () => ({
         },
         splitChunks: {
             cacheGroups: {
-                vendor: {
+                defaultVendors: {
                     test: (m, c, entry) => {
                         return (
                             m.constructor.name !== "CssModule" &&
@@ -153,15 +149,9 @@ module.exports = () => ({
                 }
             }
         },
+        minimize : global.elixir.isProduction,
         minimizer: [
-            ( compiler ) => {
-                const TerserPlugin = require('terser-webpack-plugin');
-                new TerserPlugin({
-                  terserOptions: {
-                    compress: {},
-                  }
-                }).apply( compiler );
-            },
+            new TerserPlugin(),
             new CssMinimizerPlugin()
         ]
     }

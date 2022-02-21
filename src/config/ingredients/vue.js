@@ -1,6 +1,5 @@
 const { VueLoaderPlugin } = require( "vue-loader" );
-import webpack from "webpack";
-
+const { DefinePlugin } = require( "webpack" );
 module.exports = function(
     filename,
     {
@@ -35,9 +34,7 @@ module.exports = function(
                         test: /\.vue$/,
                         loader: "vue-loader",
                         options: {
-                            sourceMap: true,
-                            reactivityTransform: true
-
+                            sourceMap: true
                         },
                         exclude: file =>
                             /node_modules/.test(file) && !/\.vue\.js/.test(file)
@@ -45,8 +42,7 @@ module.exports = function(
                 ]
             },
             plugins: [
-                new webpack.DefinePlugin({
-                    __VUE_OPTIONS_API__: global.elixir.isProduction,
+                new DefinePlugin({
                     __VUE_PROD_DEVTOOLS__: !global.elixir.isProduction,
                 }),
                 new VueLoaderPlugin( { options: { sourceMap: true } } )
