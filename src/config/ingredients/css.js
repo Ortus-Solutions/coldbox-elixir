@@ -15,6 +15,7 @@ module.exports = function(
     if( fs.existsSync( path.join(global.elixir.rootPath, "postcss.config.js") ) ){
         dependencies.push( "postcss-loader" );
     }
+    this.dependencies( dependencies );
     
     const expandedOutputDirectory = path.join(this.prefix, outputDirectory);
     const chunkName = path.join(expandedOutputDirectory, name);
