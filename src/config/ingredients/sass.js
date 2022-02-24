@@ -8,6 +8,6 @@ module.exports = function(
         entryDirectory = "resources/assets/sass/"
     } = {}
 ) {
-    this.dependencies(["node-sass", "sass-loader"]);
+    this.dependencies(["sass", "sass-loader"]);
     return this.css(filename, { name, outputDirectory, entryDirectory });
 };

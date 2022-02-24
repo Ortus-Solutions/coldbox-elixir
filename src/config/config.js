@@ -1,6 +1,6 @@
 const detectInstalled = require("detect-installed");
 const exec = require("child_process").execSync;
-const webpackMerge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 const path = require("path");
 const fs = require("fs");
 
@@ -102,12 +102,12 @@ class ElixirConfig {
 
     contentbox() {
         return this.modules({
-            includes: ["modules_app/contentbox-custom/_modules"]
+            includes: [ "modules_app/contentbox-custom/_modules" ]
         });
     }
 
     mergeConfig(config) {
-        this.config = webpackMerge.smart(this.config, config);
+        this.config = merge(this.config, config);
         return this;
     }
 
@@ -122,7 +122,7 @@ class ElixirConfig {
     }
 
     generateFrom(config) {
-        return webpackMerge.smart(config, this.config);
+        return merge(config, this.config);
     }
 
     dependencies(deps) {
@@ -172,7 +172,7 @@ class ElixirConfig {
     }
 
     mergeBabelOptions(options) {
-        this.babelOptions = webpackMerge(this.babelOptions, options);
+        this.babelOptions = merge(this.babelOptions, options);
         return this;
     }
 

@@ -1,6 +1,6 @@
-const WebpackDeleteAfterEmit = require("webpack-delete-after-emit");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const path = require("path");
+const fs = require("fs");
 
 module.exports = function(
     filename,
@@ -10,12 +10,13 @@ module.exports = function(
         entryDirectory = "resources/assets/css/"
     } = {}
 ) {
-    this.dependencies([
-        "css-loader",
-        "postcss-loader",
-        "url-loader",
-        "file-loader"
-    ]);
+
+    let dependencies = [ "css-loader" ];
+    if( fs.existsSync( path.join(global.elixir.rootPath, "postcss.config.js") ) ){
+        dependencies.push( "postcss-loader" );
+    }
+    this.dependencies( dependencies );
+    
     const expandedOutputDirectory = path.join(this.prefix, outputDirectory);
     const chunkName = path.join(expandedOutputDirectory, name);
     const srcName = Array.isArray(filename)
@@ -42,12 +43,6 @@ module.exports = function(
             }
         },
         plugins: [
-            new WebpackDeleteAfterEmit({
-                globs: [
-                    `${expandedOutputDirectory}/*.js`,
-                    `${expandedOutputDirectory}/*.js.map`
-                ]
-            }),
             new CleanWebpackPlugin({
                 cleanOnceBeforeBuildPatterns: [expandedOutputDirectory]
             })

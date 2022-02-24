@@ -3,24 +3,29 @@ const path = require("path");
 const fs = require("fs");
 
 module.exports = function cssLoaders(options = {}) {
+    const styleLoader = {
+        loader: "style-loader"
+    };
+
     const cssLoader = {
         loader: "css-loader",
-        options: {
-            sourceMap: options.sourceMap
+        options : {
+            sourceMap : true
         }
     };
 
     const resolveUrlLoader = {
         loader: "resolve-url-loader",
         options: {
-            removeCR: true
+            removeCR: true,
+            root: global.elixir.rootPath
         }
     };
 
     const postcssLoader = {
         loader: "postcss-loader",
-        options: {
-            sourceMap: options.sourceMap
+        options : {
+            sourceMap : true
         }
     };
 
@@ -30,19 +35,27 @@ module.exports = function cssLoaders(options = {}) {
 
     // generate loader string to be used with extract text plugin
     function generateLoaders(loader, loaderOptions) {
-        const loaders = [cssLoader, resolveUrlLoader];
+        let loaders = [ cssLoader, resolveUrlLoader ];
 
         if (shouldUsePostCSSLoader) {
             loaders.push(postcssLoader);
         }
 
         if (loader) {
-            loaders.push({
+            let def = {
                 loader: loader + "-loader",
-                options: Object.assign({}, loaderOptions, {
-                    sourceMap: options.sourceMap
-                })
-            });
+                options: Object.assign( { sourceMap : true }, loaderOptions )
+            };
+
+            if( loader == 'css' ){
+                def.type = "asset/source";
+            }
+
+            if( loader == 'sass' ){
+                def.options[ "implementation" ] = require( "sass" );
+            }
+
+            loaders.push( def );
         }
 
         // Extract CSS when that option is specified
@@ -50,18 +63,21 @@ module.exports = function cssLoaders(options = {}) {
         if (options.extract) {
             return [MiniCssExtractPlugin.loader].concat(loaders);
         } else {
-            return ["vue-style-loader"].concat(loaders);
+            return loaders;
         }
     }
 
     // https://vue-loader.vuejs.org/en/configurations/extract-css.html
-    return {
+    let styleLoaders = {
         css: generateLoaders(),
         postcss: generateLoaders(),
         less: generateLoaders("less"),
-        sass: generateLoaders("sass", { indentedSyntax: true }),
-        scss: generateLoaders("sass"),
+        // The sourceMap option has to be true for resolve-url-loader
+        sass: generateLoaders("sass" ),
+        scss: generateLoaders("sass" ),
         stylus: generateLoaders("stylus"),
         styl: generateLoaders("stylus")
     };
+    
+    return styleLoaders;
 };

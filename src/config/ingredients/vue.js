@@ -1,3 +1,5 @@
+const { VueLoaderPlugin } = require( "vue-loader" );
+const { DefinePlugin } = require( "webpack" );
 module.exports = function(
     filename,
     {
@@ -8,32 +10,16 @@ module.exports = function(
 ) {
     if (
         this.dependencies([
-            "@babel/plugin-syntax-jsx@^7",
-            "@vue/babel-plugin-transform-vue-jsx@^1",
-            "@vue/babel-helper-vue-jsx-merge-props@^1",
-            "vue-loader@^15",
-            "vue-template-compiler"
+            "@vue/babel-plugin-jsx",
+            "vue-loader@^17"
         ])
     ) {
         return;
     }
 
-    let VueLoaderPlugin = class EmptyVueLoaderPlugin {};
-    try {
-        VueLoaderPlugin = require("vue-loader/lib/plugin");
-    } catch (e) {
-        try {
-            require("vue-loader");
-            console.error(`vue-loader 15+ is required for use with this library
-but we weren't able to load it.
-You probably have an old version of vue-loader installed.
-Make sure all old versions are uninstalled and then try again.`);
-        } catch (e) {}
-    }
-
     this.once("vue", () => {
         this.mergeBabelOptions({
-            plugins: ["@vue/babel-plugin-transform-vue-jsx"]
+            plugins: ["@vue/babel-plugin-jsx"]
         });
         this.mergeConfig({
             resolve: {
@@ -47,12 +33,20 @@ Make sure all old versions are uninstalled and then try again.`);
                     {
                         test: /\.vue$/,
                         loader: "vue-loader",
+                        options: {
+                            sourceMap: true
+                        },
                         exclude: file =>
                             /node_modules/.test(file) && !/\.vue\.js/.test(file)
                     }
                 ]
             },
-            plugins: [new VueLoaderPlugin()]
+            plugins: [
+                new DefinePlugin({
+                    __VUE_PROD_DEVTOOLS__: !global.elixir.isProduction,
+                }),
+                new VueLoaderPlugin( { options: { sourceMap: true } } )
+            ]
         });
     });
     return this.js(filename, {

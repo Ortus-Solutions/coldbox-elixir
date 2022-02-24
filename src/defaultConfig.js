@@ -1,13 +1,12 @@
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const CleanObsoleteChunks = require("webpack-clean-obsolete-chunks");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const ManifestPlugin = require("webpack-manifest-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const styleLoaders = require("./utils/styleLoaders");
-const { EnvironmentPlugin } = require("webpack");
-const webpackMerge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 const path = require("path");
 const fs = require("fs");
 
@@ -28,12 +27,19 @@ module.exports = () => ({
             : "[name].js"
     },
     module: {
+        parser: {
+            javascript: {
+              exportsPresence: global.elixir.isProduction ? false : 'auto',
+              importExportsPresence : global.elixir.isProduction ? false : 'auto'
+            }
+        },
         rules: [
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
                 loader: "babel-loader",
-                options: webpackMerge.smart(global.elixir.config.babelOptions, {
+                options: merge(global.elixir.config.babelOptions, {
+                    sourceMap : true,
                     presets: [
                         [
                             "@babel/preset-env",
@@ -44,38 +50,34 @@ module.exports = () => ({
                                 }
                             }
                         ]
-                    ],
-                    plugins: ["@babel/plugin-proposal-object-rest-spread"]
+                    ]
                 })
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-                loader: "url-loader",
-                options: {
-                    limit: 10000,
-                    name: global.elixir.versioning
-                        ? "includes/images/[name].[hash:7].[ext]"
-                        : "includes/images/[name].[ext]"
+                type: "asset",
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 1000000 // 1000 kb
+                    }
                 }
             },
             {
                 test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-                loader: "url-loader",
-                options: {
-                    limit: 10000,
-                    name: global.elixir.versioning
-                        ? "includes/media/[name].[hash:7].[ext]"
-                        : "includes/media/[name].[ext]"
+                type: "asset",
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 1000000 // 1000 kb
+                    }
                 }
             },
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                loader: "url-loader",
-                options: {
-                    limit: 10000,
-                    name: global.elixir.versioning
-                        ? "includes/fonts/[name].[hash:7].[ext]"
-                        : "includes/fonts/[name].[ext]"
+                type: "asset",
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 10000000 // 10000 kb
+                    }
                 }
             }
         ].concat(
@@ -86,9 +88,18 @@ module.exports = () => ({
         )
     },
     devtool: global.elixir.isProduction
-        ? "#source-map"
-        : "cheap-module-eval-source-map",
+                ? "source-map"
+                : "eval-source-map",
     resolve: {
+        fallback: {
+            dgram: false,
+            fs: false,
+            net: false,
+            tls: false,
+            child_process: false,
+            timers: require.resolve("timers-browserify"),
+            path: require.resolve("path-browserify")
+        },
         extensions: [".js", ".json"],
         alias: {
             "@": path.join(global.elixir.rootPath, "resources/assets/js")
@@ -107,17 +118,14 @@ module.exports = () => ({
         new CleanObsoleteChunks({
             verbose: false
         }),
-        new ManifestPlugin({
+        new WebpackManifestPlugin({
             fileName: global.elixir.manifestFileName
         }),
         new MiniCssExtractPlugin({
             filename: global.elixir.versioning
                 ? "[name].[contenthash].css"
                 : "[name].css"
-        }),
-        new EnvironmentPlugin({
-            "NODE_ENV": global.elixir.isProduction ? "production" : "development"
-        }),
+        })
     ],
     stats: {
         children: false
@@ -128,7 +136,7 @@ module.exports = () => ({
         },
         splitChunks: {
             cacheGroups: {
-                vendor: {
+                defaultVendors: {
                     test: (m, c, entry) => {
                         return (
                             m.constructor.name !== "CssModule" &&
@@ -141,25 +149,10 @@ module.exports = () => ({
                 }
             }
         },
+        minimize : global.elixir.isProduction,
         minimizer: [
-            new TerserPlugin({
-                cache: true,
-                parallel: true,
-                sourceMap: true
-            }),
-            new OptimizeCSSAssetsPlugin({})
+            new TerserPlugin(),
+            new CssMinimizerPlugin()
         ]
-    },
-    node: {
-        // prevent webpack from injecting useless setImmediate polyfill because Vue
-        // source contains it (although only uses it if it's native).
-        setImmediate: false,
-        // prevent webpack from injecting mocks to Node native modules
-        // that does not make sense for the client
-        dgram: "empty",
-        fs: "empty",
-        net: "empty",
-        tls: "empty",
-        child_process: "empty"
     }
 });

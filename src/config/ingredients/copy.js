@@ -1,7 +1,7 @@
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = function(from, to) {
-    if (this.dependencies(["copy-webpack-plugin@6"])) {
+    if (this.dependencies(["copy-webpack-plugin@10.2.4"])) {
         return;
     }
     const CopyWebpackPlugin = require("copy-webpack-plugin");

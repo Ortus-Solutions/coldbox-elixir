@@ -11,7 +11,7 @@ test("it ensures the required dependencies are installed", () => {
         mix.sass("app.css");
     });
     expect(elixir.config.missingDependencies).toEqual([
-        "node-sass",
+        "sass",
         "sass-loader"
     ]);
 });
