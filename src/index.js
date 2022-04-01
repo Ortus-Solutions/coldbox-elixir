@@ -9,7 +9,7 @@ function elixir(recipe = () => {}, baseConfig) {
     return elixir.config.generateFrom(baseConfig);
 }
 
-elixir.isProduction = process.env.NODE_ENV || "production";
+elixir.isProduction = process.env.NODE_ENV === "production";
 elixir.rootPath = path.resolve(__dirname, "../../../");
 elixir.config = new ElixirConfig();
 elixir.versioning = elixir.isProduction;
