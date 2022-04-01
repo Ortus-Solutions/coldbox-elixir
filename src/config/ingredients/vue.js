@@ -43,7 +43,7 @@ module.exports = function(
             },
             plugins: [
                 new DefinePlugin({
-                    __VUE_PROD_DEVTOOLS__: !global.elixir.isProduction,
+                    __VUE_PROD_DEVTOOLS__: global.elixir.enableDevtools || !global.elixir.isProduction,
                 }),
                 new VueLoaderPlugin( { options: { sourceMap: true } } )
             ]
