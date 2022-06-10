@@ -1,4 +1,3 @@
-const { VueLoaderPlugin } = require( "vue-loader" );
 const { DefinePlugin } = require( "webpack" );
 module.exports = function(
     filename,
@@ -16,7 +15,8 @@ module.exports = function(
     ) {
         return;
     }
-
+    const { VueLoaderPlugin } = require( "vue-loader" );
+    
     this.once("vue", () => {
         this.mergeBabelOptions({
             plugins: ["@vue/babel-plugin-jsx"]
