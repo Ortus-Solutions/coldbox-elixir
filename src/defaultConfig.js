@@ -24,7 +24,8 @@ module.exports = () => ({
         publicPath: "/",
         filename: global.elixir.versioning
             ? "[name].[chunkhash].js"
-            : "[name].js"
+            : "[name].js",
+		assetModuleFilename: global.elixir.isProduction  ? 'includes/images/[name].[hash][ext]' : 'includes/images/[name][ext]'
     },
     module: {
         parser: {
@@ -56,27 +57,33 @@ module.exports = () => ({
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
                 type: "asset",
-                parser: {
+				parser: {
                     dataUrlCondition: {
-                        maxSize: 1000000 // 1000 kb
+                        maxSize: global.elixir.base64SourceSize
                     }
                 }
             },
             {
                 test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
                 type: "asset",
+				generator: {
+					filename: global.elixir.isProduction  ? 'includes/media/[name].[hash][ext]' : 'includes/media/[name][ext]'
+				},
                 parser: {
                     dataUrlCondition: {
-                        maxSize: 1000000 // 1000 kb
+                        maxSize: global.elixir.base64SourceSize
                     }
                 }
             },
             {
                 test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
                 type: "asset",
+				generator: {
+					filename: global.elixir.isProduction  ? 'includes/fonts/[name].[hash][ext]' : 'includes/fonts/[name][ext]'
+				},
                 parser: {
                     dataUrlCondition: {
-                        maxSize: 10000000 // 10000 kb
+                        maxSize: global.elixir.base64SourceSize
                     }
                 }
             }

@@ -16,5 +16,6 @@ elixir.versioning = elixir.isProduction;
 elixir.manifestFileName = "includes/rev-manifest.json";
 elixir.runtimeFileNameWithoutExtension = "includes/js/runtime";
 elixir.vendorChunkFileNameWithoutExtension = "includes/js/vendor";
+elixir.base64SourceSize = 0;
 
 module.exports = global.elixir = elixir;
