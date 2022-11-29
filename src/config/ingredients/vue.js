@@ -1,10 +1,16 @@
 const { DefinePlugin } = require( "webpack" );
+
+function detectVersion() {
+    return parseInt(require( "vue" ).version);
+}
+
 module.exports = function(
     filename,
     {
         name = this.withoutExtension(filename),
         outputDirectory = "includes/js/",
-        entryDirectory = "resources/assets/js/"
+        entryDirectory = "resources/assets/js/",
+        version = detectVersion()
     } = {}
 ) {
     if (
@@ -16,7 +22,7 @@ module.exports = function(
         return;
     }
     const { VueLoaderPlugin } = require( "vue-loader" );
-    
+
     this.once("vue", () => {
         this.mergeBabelOptions({
             plugins: ["@vue/babel-plugin-jsx"]
@@ -25,7 +31,7 @@ module.exports = function(
             resolve: {
                 extensions: [".vue"],
                 alias: {
-                    vue$: "vue/dist/vue.esm.js"
+                    vue$: version === 3 ? "vue/dist/vue.esm-browser.js" : "vue/dist/vue.esm.js"
                 }
             },
             module: {
