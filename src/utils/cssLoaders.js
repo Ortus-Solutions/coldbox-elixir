@@ -10,7 +10,8 @@ module.exports = function cssLoaders(options = {}) {
     const cssLoader = {
         loader: "css-loader",
         options : {
-            sourceMap : true
+            sourceMap : true,
+            url: false
         }
     };
 
