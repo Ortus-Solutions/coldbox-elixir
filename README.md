@@ -6,7 +6,7 @@ ColdBox Elixir provides a clean, fluent API for defining basic [Webpack](http://
 
 ## Documentation
 
-Read the full docs at https://coldbox-elixir.ortusbooks.com/v/v3/
+Read the full docs at https://coldbox-elixir.ortusbooks.com
 
 ## Versioning
 
