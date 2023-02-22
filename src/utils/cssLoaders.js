@@ -17,8 +17,7 @@ module.exports = function cssLoaders(options = {}) {
     const resolveUrlLoader = {
         loader: "resolve-url-loader",
         options: {
-            removeCR: true,
-            root: global.elixir.rootPath
+            removeCR: true
         }
     };
 
@@ -52,7 +51,7 @@ module.exports = function cssLoaders(options = {}) {
             }
 
             if( loader == 'sass' ){
-                def.options[ "implementation" ] = require( "sass" );
+                def.options[ "implementation" ] = "sass";
             }
 
             loaders.push( def );
@@ -61,7 +60,14 @@ module.exports = function cssLoaders(options = {}) {
         // Extract CSS when that option is specified
         // (which is the case during production build)
         if (options.extract) {
-            return [MiniCssExtractPlugin.loader].concat(loaders);
+            let miniLoader = {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                    // Ensure 
+                    publicPath: '../../',
+                }
+            };
+            return [ miniLoader ].concat(loaders);
         } else {
             return loaders;
         }
