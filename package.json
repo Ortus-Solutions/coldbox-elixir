@@ -26,6 +26,7 @@
     "resolve-url-loader": "^5.0.0",
     "terser-webpack-plugin": "^5.3.1",
     "timers-browserify": "^2.0.12",
+		"url-loader": "^4.1.1",
     "webpack-clean-obsolete-chunks": "^0.4.0",
     "webpack-delete-after-emit": "^1.0.5",
     "webpack-manifest-plugin": "^4.1.1",
