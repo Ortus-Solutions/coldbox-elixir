@@ -1,7 +1,11 @@
 const { DefinePlugin } = require( "webpack" );
 
 function detectVersion() {
-    return parseInt(require( "vue" ).version);
+    try{
+        return parseInt( require( "vue" ).version );
+    } catch( ex ){
+        return null;
+    }
 }
 
 module.exports = function(
@@ -13,11 +17,15 @@ module.exports = function(
         version = detectVersion()
     } = {}
 ) {
+    var deps = [
+        "@vue/babel-plugin-jsx",
+        "vue-loader@^17"
+    ];
+    if( !version ){
+        deps.push( "vue" );
+    }
     if (
-        this.dependencies([
-            "@vue/babel-plugin-jsx",
-            "vue-loader@^17"
-        ])
+        this.dependencies( deps )
     ) {
         return;
     }

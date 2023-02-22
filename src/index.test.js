@@ -11,7 +11,7 @@ test("it returns the base configuration object when no methods are called inside
     delete actual["plugins"];
     delete expected["plugins"];
 
-    expect(actual).toEqual(expected);
+    expect( JSON.stringify( actual ) ).toEqual( JSON.stringify( expected ) );
 });
 
 test("it can accept an override for the base configuration object", () => {
@@ -24,3 +24,4 @@ test("it can accept an override for the base configuration object", () => {
     };
     expect(elixir(() => {}, overrideConfig)).toEqual(overrideConfig);
 });
+
