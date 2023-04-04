@@ -39,7 +39,7 @@ module.exports = function(
             resolve: {
                 extensions: [".vue"],
                 alias: {
-                    vue$: version === 3 ? "vue/dist/vue.esm-browser.js" : "vue/dist/vue.esm.js"
+                    vue$: version === 3 ? "vue/dist/vue.esm-bundler.js" : "vue/dist/vue.esm.js"
                 }
             },
             module: {
@@ -58,6 +58,7 @@ module.exports = function(
             plugins: [
                 new DefinePlugin({
                     __VUE_PROD_DEVTOOLS__: global.elixir.enableDevtools || !global.elixir.isProduction,
+                    __VUE_OPTIONS_API__: global.elixir.enableOptionsApi || "true",
                 }),
                 new VueLoaderPlugin( { options: { sourceMap: true } } )
             ]
